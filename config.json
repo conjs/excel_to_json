@@ -1,0 +1,19 @@
+{
+  "data":[
+    {
+      "name":"内网165",
+      "inPath":"C:/Users/Administrator/Desktop/new_svn/shuzhi/数据表/",
+      "serverOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out1/s/",
+      "clientOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out1/c/",
+      "clientZip":1
+    }
+  ,
+    {
+      "name":"公网181",
+      "inPath":"C:/Users/Administrator/Desktop/new_svn/shuzhi/数据表/",
+      "serverOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out2/s/",
+      "clientOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out2/c/",
+      "clientZip":1
+    }
+  ]
+}
