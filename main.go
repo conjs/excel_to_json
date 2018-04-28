@@ -74,7 +74,10 @@ func createZip(path string){
 	}
 	fzip, _ := os.Create(path+"sdata.zip")
 	w := zip.NewWriter(fzip)
+
+	defer fzip.Close()
 	defer w.Close()
+
 	for _, file := range f {
 		fw, _ := w.Create(file.Name())
 		filecontent, err := ioutil.ReadFile(path + file.Name())
@@ -83,8 +86,6 @@ func createZip(path string){
 		}
 		fw.Write(filecontent)
 	}
-	fzip.Close()
-	w.Close()
 }
 
 

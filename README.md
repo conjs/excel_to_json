@@ -1,10 +1,9 @@
-excel转json<br>
-支持服务器端和客户端<br>
-服务器端：生成的是标准JSON<br>
-客户端：生成的是阉割版的,表头+数据的方式<br>
+# excel转json<br>
+## 支持服务器端和客户端<br>
+## 服务器端：生成的是标准JSON<br>
+## 客户端：生成的是阉割版的,表头+数据的方式<br><br/>
 ![演示图](process.png)<br>
-<br/>
-
+<br/><br/>
 <pre>
 config.json
 {
