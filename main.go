@@ -133,7 +133,7 @@ func excelOp(path string,fileName string,serverPath string,clientPath string) {
 		var cValue = make([]interface{}, celLen)
 		for cellIdx, cell := range row.Cells {
 			if types[cellIdx] == "int" {
-				v, _ := cell.Int()
+				v, _ := cell.Int64()
 				t[field[cellIdx]] = v
 				cValue[cellIdx] = v
 			} else if types[cellIdx] == "string" {
