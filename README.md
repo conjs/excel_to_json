@@ -13,6 +13,7 @@ config.json
       "inPath":"C:/Users/Administrator/Desktop/new_svn/shuzhi/数据表/",
       "serverOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out1/s/",
       "clientOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out1/c/",
+      "structPath":"C:/Users/Administrator/Downloads/1/ttttt/u/",
       "clientZip":1
     }
   ,
@@ -21,7 +22,8 @@ config.json
       "inPath":"C:/Users/Administrator/Desktop/new_svn/shuzhi/数据表/",
       "serverOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out2/s/",
       "clientOutPath":"C:/Users/Administrator/Desktop/new_svn/a/out2/c/",
-      "serverZip":1
+      "structPath":"C:/Users/Administrator/Downloads/1/ttttt/u/",
+      "serverZip":0
     }
   ]
 }
@@ -30,5 +32,6 @@ name：平台标志<br/>
 inPath：excel目录<br/>
 serverOutPath：服务器端生成json路径<br/>
 clientOutPath：客户端生成json路径<br/>
+structPath：结构体输出路径
 [clientZip]：客户端是否打个ZIP包,1打包，0不打包. 此配置可选，删除此配置默认为不打包<br/>
 [serverZip]:服务器是否打包，同上
