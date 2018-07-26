@@ -8,6 +8,7 @@ import (
 	"excel_to_json/parseConfig"
 	"strings"
 	"archive/zip"
+	"bytes"
 )
 func main() {
 	readPath()
@@ -22,6 +23,7 @@ func readPath(){
 		inPath := plat["inPath"].(string)
 		serverOutPath := plat["serverOutPath"].(string)
 		clientOutPath := plat["clientOutPath"].(string)
+		structPath := plat["structPath"].(string)
 
 		serverZip := 0
 		if plat["serverZip"] !=nil{
@@ -34,18 +36,22 @@ func readPath(){
 		}
 
 		println("\n **** PROCESS "+name+"**** \n")
-		processAll(inPath,serverOutPath,clientOutPath,serverZip,clientZip)
+		processAll(inPath,serverOutPath,clientOutPath,serverZip,clientZip,structPath)
 	}
 	fmt.Println("\n **** DONE ****")
 	fmt.Print("\n Press 'Enter' to continue...\n")
 	fmt.Scanln()
 }
 
-func processAll(inpath string,serverPath string,clientPath string,serverZip int,clientZip int){
+func processAll(inpath string,serverPath string,clientPath string,serverZip int,clientZip int,structPath string){
 	files,_:=ioutil.ReadDir(inpath)
+	var buf bytes.Buffer
 	for _,file := range files{
-		excelOp(inpath,file.Name(),serverPath,clientPath)
+		itemBytes:=excelOp(inpath,file.Name(),serverPath,clientPath,structPath)
+		buf.WriteString(itemBytes)
 	}
+	ioutil.WriteFile(structPath+"struct.txt",buf.Bytes(),0666)
+
 	if serverZip==1{
 		delZip(serverPath)
 		createZip(serverPath)
@@ -89,7 +95,7 @@ func createZip(path string){
 }
 
 
-func excelOp(path string,fileName string,serverPath string,clientPath string) {
+func excelOp(path string,fileName string,serverPath string,clientPath string,structPath string)string {
 	println("process "+path+" "+fileName)
 	xlFile, err := xlsx.OpenFile(path+fileName)
 	if err != nil {
@@ -156,6 +162,38 @@ func excelOp(path string,fileName string,serverPath string,clientPath string) {
 
 	ioutil.WriteFile(clientPath+getOutputFileName(fileName),cbyte,0666)
 	ioutil.WriteFile(serverPath+getOutputFileName(fileName),sbyte,0666)
+
+	var buffer bytes.Buffer
+	buffer.WriteString("type ")
+	buffer.WriteString("Sdata"+getStructName(fileName))
+	buffer.WriteString(" struct{\n")
+
+	for idx,item:=range field{
+		buffer.WriteString("\t")
+		buffer.WriteString(getFirstMStr(item))
+		buffer.WriteString(" ")
+
+		t:=types[idx]
+		if t=="string"{
+			buffer.WriteString("string")
+		}else{
+			buffer.WriteString("int")
+		}
+		buffer.WriteString(" `json:\""+item+"\"`\n")
+	}
+	buffer.WriteString("}\n\n")
+	//println(buffer.String())
+	//ioutil.WriteFile(structPath+getOutputFileName(fileName),buffer.Bytes(),0666)
+	return buffer.String()
+}
+
+func getFirstMStr(s string) string {
+	var buffer bytes.Buffer
+	arr:=strings.Split(s,"_")
+	for _,item:=range arr{
+		buffer.WriteString(strings.Title(item))
+	}
+	return buffer.String()
 }
 
 func getOutputFileName(excelName string) string{
@@ -167,4 +205,15 @@ func getOutputFileName(excelName string) string{
 	}
 	r := strings.Split(arr[1],".")
 	return r[0]+".json"
+}
+func getStructName(excelName string) string{
+	//X_形象选择-xingxiang.xlsx
+	arr := strings.Split(excelName,"-")
+	var len = len(arr)
+	if(len==1){
+		r := strings.Split(excelName,".")
+		return getFirstMStr(r[0])
+	}
+	r := strings.Split(arr[1],".")
+	return getFirstMStr(r[0])
 }
