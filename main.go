@@ -46,11 +46,12 @@ func readPath(){
 func processAll(inpath string,serverPath string,clientPath string,serverZip int,clientZip int,structPath string){
 	files,_:=ioutil.ReadDir(inpath)
 	var buf bytes.Buffer
+	buf.WriteString("package sdata\n")
 	for _,file := range files{
 		itemBytes:=excelOp(inpath,file.Name(),serverPath,clientPath,structPath)
 		buf.WriteString(itemBytes)
 	}
-	ioutil.WriteFile(structPath+"struct.txt",buf.Bytes(),0666)
+	ioutil.WriteFile(structPath+"Entry.go",buf.Bytes(),0666)
 
 	if serverZip==1{
 		delZip(serverPath)
