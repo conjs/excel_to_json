@@ -2,7 +2,7 @@
   "data":[
     {
       "name":"应用宝    :::注意:::     下面3个路径,均以/结尾",
-      "inPath":"C:/Users/Administrator/Desktop/pix/数值/数据表/",
+      "inPath":"D:/pix_svn/数值/数据表/",
       "serverOutPath":"C:/Users/Administrator/Downloads/1/ttttt/s/",
       "clientOutPath":"C:/Users/Administrator/Downloads/1/ttttt/c/",
       "structPath":"C:/Users/Administrator/go/src/pix/sdata/"

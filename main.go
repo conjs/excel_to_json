@@ -49,6 +49,9 @@ func processAll(inpath string,serverPath string,clientPath string,serverZip int,
 	buf.WriteString("package sdata\n")
 	for _,file := range files{
 		itemBytes:=excelOp(inpath,file.Name(),serverPath,clientPath,structPath)
+		if itemBytes==""{
+			continue
+		}
 		buf.WriteString(itemBytes)
 	}
 	ioutil.WriteFile(structPath+"Entry.go",buf.Bytes(),0666)
@@ -97,6 +100,9 @@ func createZip(path string){
 
 
 func excelOp(path string,fileName string,serverPath string,clientPath string,structPath string)string {
+	if strings.HasPrefix(fileName,"~"){
+		return ""
+	}
 	println("process "+path+" "+fileName)
 	xlFile, err := xlsx.OpenFile(path+fileName)
 	if err != nil {
