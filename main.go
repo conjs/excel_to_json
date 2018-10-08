@@ -23,7 +23,12 @@ func readPath(){
 		inPath := plat["inPath"].(string)
 		serverOutPath := plat["serverOutPath"].(string)
 		clientOutPath := plat["clientOutPath"].(string)
-		structPath := plat["structPath"].(string)
+		structPath:=""
+
+		structStr,ok:=plat["structPath"]
+		if ok{
+			structPath = structStr.(string)
+		}
 
 		serverZip := 0
 		if plat["serverZip"] !=nil{
@@ -54,7 +59,10 @@ func processAll(inpath string,serverPath string,clientPath string,serverZip int,
 		}
 		buf.WriteString(itemBytes)
 	}
-	ioutil.WriteFile(structPath+"Entry.go",buf.Bytes(),0666)
+	if structPath!=""{
+		ioutil.WriteFile(structPath+"Entry.go",buf.Bytes(),0666)
+	}
+
 
 	if serverZip==1{
 		delZip(serverPath)
@@ -152,9 +160,13 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 		}
 		t := make(map[string]interface{})
 		var cValue = make([]interface{}, celLen)
+		save:=0
 		for cellIdx, cell := range row.Cells {
 			if types[cellIdx] == "int" {
 				v, _ := cell.Int64()
+				if v ==-1{
+					break
+				}
 				t[field[cellIdx]] = v
 				cValue[cellIdx] = v
 			} else if types[cellIdx] == "string" {
@@ -166,8 +178,11 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 				t[field[cellIdx]] = v
 				cValue[cellIdx] = v
 			}
+			save++
 		}
-
+		if save==0{
+			continue
+		}
 		cbody[s+1] = cValue
 		rbody[s] = t
 		s++
@@ -179,26 +194,26 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 	ioutil.WriteFile(serverPath+getOutputFileName(fileName),sbyte,0666)
 
 	var buffer bytes.Buffer
-	buffer.WriteString("type ")
-	buffer.WriteString("Sdata"+getStructName(fileName))
-	buffer.WriteString(" struct{\n")
+	if structPath!=""{
+		buffer.WriteString("type ")
+		buffer.WriteString("Sdata"+getStructName(fileName))
+		buffer.WriteString(" struct{\n")
 
-	for idx,item:=range field{
-		buffer.WriteString("\t")
-		buffer.WriteString(getFirstMStr(item))
-		buffer.WriteString(" ")
+		for idx,item:=range field{
+			buffer.WriteString("\t")
+			buffer.WriteString(getFirstMStr(item))
+			buffer.WriteString(" ")
 
-		t:=types[idx]
-		if t=="string"{
-			buffer.WriteString("string")
-		}else{
-			buffer.WriteString("int")
+			t:=types[idx]
+			if t=="string"{
+				buffer.WriteString("string")
+			}else{
+				buffer.WriteString("int")
+			}
+			buffer.WriteString(" `json:\""+item+"\"`\n")
 		}
-		buffer.WriteString(" `json:\""+item+"\"`\n")
+		buffer.WriteString("}\n\n")
 	}
-	buffer.WriteString("}\n\n")
-	//println(buffer.String())
-	//ioutil.WriteFile(structPath+getOutputFileName(fileName),buffer.Bytes(),0666)
 	return buffer.String()
 }
 
