@@ -31,7 +31,9 @@ config.json
 name：平台标志<br/>
 inPath：excel目录<br/>
 serverOutPath：服务器端生成json路径<br/>
-clientOutPath：客户端生成json路径<br/>
-structPath：结构体输出路径<br/>
+[clientOutPath]：客户端生成json路径<br/>
+[structPath]：结构体输出路径<br/>
 [clientZip]：客户端是否打个ZIP包,1打包，0不打包. 此配置可选，删除此配置默认为不打包<br/>
 [serverZip]:服务器是否打包，同上
+
+其中，clientOutPath，structPath，clientZip，serverZip 都是选填。不填则不生成

@@ -21,9 +21,14 @@ func readPath(){
 		var plat = v.(map[string]interface{})
 		name := plat["name"].(string)
 		inPath := plat["inPath"].(string)
+		clientOutPath,structPath:="",""
+
 		serverOutPath := plat["serverOutPath"].(string)
-		clientOutPath := plat["clientOutPath"].(string)
-		structPath:=""
+
+		clientStr,ok:=plat["clientOutPath"]
+		if ok{
+			clientOutPath = clientStr.(string)
+		}
 
 		structStr,ok:=plat["structPath"]
 		if ok{
@@ -68,7 +73,7 @@ func processAll(inpath string,serverPath string,clientPath string,serverZip int,
 		delZip(serverPath)
 		createZip(serverPath)
 	}
-	if clientZip==1{
+	if clientZip==1 && clientPath!=""{
 		delZip(clientPath)
 		createZip(clientPath)
 	}
@@ -190,7 +195,10 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 	cbyte,_ := json.Marshal(cbody)
 	sbyte,_ := json.Marshal(rbody)
 
-	ioutil.WriteFile(clientPath+getOutputFileName(fileName),cbyte,0666)
+	if clientPath!=""{
+		ioutil.WriteFile(clientPath+getOutputFileName(fileName),cbyte,0666)
+	}
+
 	ioutil.WriteFile(serverPath+getOutputFileName(fileName),sbyte,0666)
 
 	var buffer bytes.Buffer
