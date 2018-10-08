@@ -109,7 +109,8 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 		fmt.Println("open file error")
 	}
 	sheet := xlFile.Sheets[0]
-	rowLen := len(sheet.Rows)
+	//rowLen := len(sheet.Rows)
+	rowLen, s := 0, 0
 
 	celLen := len(sheet.Cols)
 	var field= make([]string, celLen)
@@ -117,7 +118,14 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 
 	var fieldClient= make([]interface{}, celLen)
 
-	s := 0
+
+	for _, row := range sheet.Rows {
+		if row.Cells[0].String() != "" {
+			rowLen++
+		}
+	}
+
+	//s := 0
 	var rbody= make([]map[string]interface{}, rowLen-3)
 
 	var cbody = make([][]interface{}, rowLen-2)
