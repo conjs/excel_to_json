@@ -1,14 +1,14 @@
 package main
 import (
-	"fmt"
-	"encoding/json"
-	"github.com/tealeg/xlsx"
-	"os"
-	"io/ioutil"
-	"excel_to_json/parseConfig"
-	"strings"
 	"archive/zip"
 	"bytes"
+	"encoding/json"
+	"excel_to_json/parseConfig"
+	"fmt"
+	"github.com/tealeg/xlsx"
+	"io/ioutil"
+	"os"
+	"strings"
 )
 func main() {
 	readPath()
@@ -114,6 +114,9 @@ func createZip(path string){
 
 func excelOp(path string,fileName string,serverPath string,clientPath string,structPath string)string {
 	if strings.HasPrefix(fileName,"~"){
+		return ""
+	}
+	if !strings.HasSuffix(fileName,".xlsx"){
 		return ""
 	}
 	println("process "+path+" "+fileName)
@@ -245,7 +248,6 @@ func getOutputFileName(excelName string) string{
 	return r[0]+".json"
 }
 func getStructName(excelName string) string{
-	//X_形象选择-xingxiang.xlsx
 	arr := strings.Split(excelName,"-")
 	var len = len(arr)
 	if(len==1){
