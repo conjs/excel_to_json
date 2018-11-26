@@ -147,7 +147,9 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 	var cbody = make([][]interface{}, rowLen-2)
 	cbody[0] = fieldClient
 
-	for idxRow, row := range sheet.Rows {
+	//for idxRow, row := range sheet.Rows {
+	for idxRow:=0;idxRow<rowLen;idxRow++{
+		row := sheet.Rows[idxRow]
 		if idxRow == 0 || idxRow == 1 || idxRow == 2 {
 			for cellIdx, cell := range row.Cells {
 				text := strings.TrimSpace(cell.String())
@@ -169,20 +171,37 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 		t := make(map[string]interface{})
 		var cValue = make([]interface{}, celLen)
 		save:=0
-		for cellIdx, cell := range row.Cells {
+		//for cellIdx, cell := range row.Cells {
+		for cellIdx:=0;cellIdx<celLen;cellIdx++{
+
 			if types[cellIdx] == "int" {
-				v, _ := cell.Int64()
-				if v ==-1{
-					break
+				var v int64 = 0
+				if cellIdx<len(row.Cells){
+					cell := row.Cells[cellIdx]
+					v, _ = cell.Int64()
+				}
+				if v<0{
+					v=0
 				}
 				t[field[cellIdx]] = v
 				cValue[cellIdx] = v
 			} else if types[cellIdx] == "string" {
-				itemCell:=strings.TrimSpace(cell.String())
+				var itemCell = ""
+				if cellIdx<len(row.Cells){
+					cell := row.Cells[cellIdx]
+					itemCell=strings.TrimSpace(cell.String())
+				}
 				t[field[cellIdx]] = itemCell
 				cValue[cellIdx] = itemCell
 			} else {
-				v, _ := cell.Float()
+				var v float64=0
+				if cellIdx<len(row.Cells){
+					cell := row.Cells[cellIdx]
+					v, _ = cell.Float()
+				}
+				if v<0{
+					v=0
+				}
 				t[field[cellIdx]] = v
 				cValue[cellIdx] = v
 			}
