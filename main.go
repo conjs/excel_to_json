@@ -125,10 +125,11 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 		fmt.Println("open file error")
 	}
 	sheet := xlFile.Sheets[0]
-	//rowLen := len(sheet.Rows)
-	rowLen, s := 0, 0
 
-	celLen := len(sheet.Cols)
+	rowLen, s,celLen := 0, 0,0
+
+	celLen = len(sheet.Cols)
+
 	var field= make([]string, celLen)
 	var types= make([]string, celLen)
 
@@ -180,9 +181,9 @@ func excelOp(path string,fileName string,serverPath string,clientPath string,str
 					cell := row.Cells[cellIdx]
 					v, _ = cell.Int64()
 				}
-				if v<0{
-					v=0
-				}
+				//if v<0{
+				//	v=0
+				//}
 				t[field[cellIdx]] = v
 				cValue[cellIdx] = v
 			} else if types[cellIdx] == "string" {
